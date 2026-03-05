@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+.venv/
+venv/
+.poetry/
+dist/
+build/
+*.log
+.idea/
+.vscode/
