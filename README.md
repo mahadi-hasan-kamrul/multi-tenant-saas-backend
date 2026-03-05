@@ -156,4 +156,5 @@ This project was built to understand backend system design including:
 
 ## Author
 
-Mahadi
+#Mahadi Hasan Kamrul
+Backend Developer
