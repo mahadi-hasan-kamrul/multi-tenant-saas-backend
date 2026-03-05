@@ -1,177 +1,159 @@
-Multi-Tenant SaaS Authentication API
+# Multi-Tenant SaaS Backend (FastAPI)
 
-Backend authentication system implementing JWT authentication with tenant isolation using FastAPI.
+Architecturally structured backend demonstrating how a SaaS platform supports multiple tenants, authentication, and tenant-isolated user data.
 
-This project demonstrates how a backend service can support multiple tenants (organizations) where each tenant's users and data are logically separated while using a single backend service.
+The project focuses on backend architecture rather than UI.
 
-The system includes:
+---
 
-User registration
+## Architecture Overview
 
-Login with JWT
+Key backend concepts implemented:
 
-Protected routes
+- Multi-tenant architecture
+- JWT authentication
+- Repository pattern
+- Async database operations
+- FastAPI dependency injection
+- PostgreSQL integration
+- Secure password hashing
 
-Tenant-aware authentication
+---
 
-Tech Stack
+## Tech Stack
 
-Python
+- FastAPI
+- PostgreSQL
+- SQLAlchemy (Async)
+- JWT (python-jose)
+- Passlib (bcrypt)
+- Poetry
+- Uvicorn
 
-FastAPI
+---
 
-Poetry (dependency management)
+## Project Structure
 
-JWT Authentication
 
-OAuth2 Password Flow
-
-Pydantic
-
-Uvicorn
-
-Key Backend Concepts Implemented
-
-This project focuses on backend architecture patterns, including:
-
-Multi-Tenant Architecture
-
-Each user belongs to a tenant (tenant_id).
-JWT tokens include the tenant identifier to enforce tenant-level access control.
-
-JWT Authentication
-
-Secure authentication using signed tokens.
-
-Token payload contains:
-
-{
-  "sub": "user_email",
-  "tenant_id": 2,
-  "exp": timestamp
-}
-OAuth2 Password Flow
-
-Authentication follows the OAuth2 password flow implemented through FastAPI's security utilities.
-
-Protected Routes
-
-Endpoints require a valid JWT token.
-
-Example protected endpoint:
-
-GET /users/me
-
-Returns the authenticated user based on the JWT.
-
-Project Structure
 app/
- ├── main.py
- ├── auth.py
- ├── models.py
- ├── schemas.py
- ├── database.py
- └── dependencies.py
+core/ # security, config
+db/ # database session
+models/ # SQLAlchemy models
+repositories/ # data access layer
+main.py # FastAPI entrypoint
 
-main.py → FastAPI application entrypoint
 
-auth.py → authentication and token logic
+Architecture follows a layered backend approach:
 
-models.py → database models
+API Layer  
+↓  
+Repository Layer  
+↓  
+Database
 
-schemas.py → request/response validation
+---
 
-database.py → database connection
+## Features
 
-dependencies.py → authentication dependencies
+### Multi-Tenant System
 
-Installation
+Each organization is represented as a **Tenant**.
 
-Clone the repository
+Users belong to a specific tenant.
 
-git clone https://github.com/yourusername/project-name.git
-cd project-name
 
-Install dependencies using Poetry
+Tenant
+└── Users
 
-poetry install
 
-Activate the environment
+---
 
-poetry shell
-Environment Variables
+### Authentication
 
-Create a .env file based on .env.example.
+Secure authentication using JWT tokens.
+
+Flow:
+
+1. User logs in with email + password
+2. Backend verifies credentials
+3. JWT token is generated
+4. Token is used to access protected endpoints
+
+---
+
+### Protected Routes
 
 Example:
 
-SECRET_KEY=your_secret_key
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-DATABASE_URL=sqlite:///./app.db
-Run the Application
 
-Start the server:
+GET /users/me
 
-uvicorn app.main:app --reload
 
-Server will run at:
+Requires JWT token.
 
-http://127.0.0.1:8000
-API Documentation
+---
 
-Interactive API docs are available at:
+## Example API Flow
+
+Create tenant:
+
+
+POST /tenants
+
+
+Create user:
+
+
+POST /users
+
+
+Login:
+
+
+POST /login
+
+
+Access protected route:
+
+
+GET /users/me
+
+
+---
+
+## Running the Project
+
+Install dependencies:
+
+
+poetry install
+
+
+Run server:
+
+
+poetry run uvicorn app.main:app --reload
+
+
+Open API documentation:
+
 
 http://127.0.0.1:8000/docs
 
-Swagger UI allows testing:
 
-/login
+---
 
-/users/me
+## Learning Goals
 
-Example Authentication Flow
-Login
-POST /login
+This project was built to understand backend system design including:
 
-Request body:
+- SaaS multi-tenant architecture
+- API authentication flows
+- database abstraction patterns
+- scalable backend structure
 
-username: main@gmail.com
-password: 123456
+---
 
-Response:
-
-{
-  "access_token": "...",
-  "token_type": "bearer"
-}
-Access Protected Route
-GET /users/me
-Authorization: Bearer <token>
-Purpose of the Project
-
-This project was built to demonstrate understanding of:
-
-Backend authentication architecture
-
-Multi-tenant system design
-
-JWT based security
-
-API design using FastAPI
-
-Possible Future Improvements
-
-Role Based Access Control (RBAC)
-
-Tenant specific databases
-
-Refresh tokens
-
-Production ready configuration
-
-Docker deployment
-
-Author
+## Author
 
 Mahadi
